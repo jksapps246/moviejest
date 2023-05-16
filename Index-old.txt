@@ -1,0 +1,109 @@
+<?php
+include_once 'inc/header.php';
+include_once 'functions/indexfunction.php';
+
+    if(isset($_POST["type"])) {
+        Filter($_POST["type"]);
+    }
+    elseif(isset($_POST["search"])) {
+        Search($_POST["search"]);
+    }
+    elseif(isset($_POST["movieID"])) {        
+          Movie($_POST["movieID"]);          
+    }
+  
+if(!$searchR){
+    echo 
+    "<div id=\"mainDiv\">      
+        <div id= \"mainTop\">     
+            <div id=\"filter\">                    
+                <form method=\"POST\" >
+                    <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"LATEST\"></div>
+                    <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"KIDS\"></div>
+                    <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"TEENS\"> </div>
+                    <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"ADULTS\"></div>  
+                </form>
+            </div>
+            <br></br>
+            <div id=\"mainTitle\">". $searchTitle ."</div>        
+                <div id=\"mainResults\">";                    
+                    for($i = 0; $i <count($posterURLS); $i++) {
+                        $path = "";
+                        if($posterURLS[$i] == null){
+                            $path = "inc/images/moviePoster.png";
+                        }
+                        else {
+                            $path = "https://image.tmdb.org/t/p/w500" . $posterURLS[$i];
+                        }
+                        echo 
+                        "<div class=\"thumbs\" style=\"background: url(".$path."); background-size: cover;\">
+                            <form method=\"POST\"  onmouseover=\"setDetails(dTitle.value, dDate.value, dLang.value,dBio.value)\">
+                                <input type=\"hidden\" class=\"thumbButton\" name=\"dTitle\" value=\"".$movieTitle[$i]."\" />
+                                <input type=\"hidden\" class=\"thumbButton\" name=\"dDate\" value=\"".$releaseDate[$i]."\" />
+                                <input type=\"hidden\" class=\"thumbButton\" name=\"dLang\" value=\"".$movieLanguage[$i]."\" />
+                                <input type=\"hidden\" class=\"thumbButton\" name=\"dBio\" value=\"".$overviews[$i]."\" />
+                                <input type=\"submit\" class=\"thumbButton\" name=\"movieID\" value=\"".$movieIDS[$i]."\" />
+                            </form>
+                        </div>";                   
+                    }
+            echo            
+                "</div>
+            </div> 
+        <div id=\"mainBottom\">  
+            <div id=\"mainInfo\">
+                <div id=\"infoLeft\">
+                    <label>Title: </label>
+                    <p id=\"dTitle\">".$defaultTitle."</p>
+                    <label>Date: </label>
+                    <p id=\"dDate\">".$defaultDate."</p>
+                    <label>Language: </label>
+                    <p id=\"dLang\">".$defaultLang."</p>
+                </div>
+                <div id=\"infoRight\">
+                    <label >Bio:</label>
+                    <p id=\"dBio\">".$defaultBio."</p>
+                </div>
+            </div>
+        </div>
+    </div>";
+}
+else {
+    echo
+    "<div id=\"searchTop\">     
+        <div id=\"filter\">
+            <form method=\"POST\">
+                <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"LATEST\"></div>
+                <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"KIDS\"></div>
+                <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"TEENS\"> </div>
+                <div class=\"filterButton\"><input type=\"submit\" name=\"type\" value=\"ADULTS\"></div>  
+            </form>
+        </div>
+        <br>
+        <div id=\"searchTitle\">Search Results for: ". $searchTitle."</div>  
+    </div>
+    <div id=\"searchResults\">";
+        for($i = 0; $i < count($posterURLS); $i++) {
+            $path = "";
+            if($posterURLS[$i] == null){
+                $path = "inc/images/moviePoster.png";
+            }
+            else {
+                $path = "https://image.tmdb.org/t/p/w500" . $posterURLS[$i];
+            }
+            echo
+            "<div class=\"searchthumbs\" style=\"background: url(".$path."); background-size: cover;\">
+                <form method=\"POST\" onmouseover=\"setDetails(dTitle.value, dDate.value, dLang.value,dBio.value)\">
+                    <input type=\"hidden\" class=\"searchthumbButton\" name=\"dTitle\" value=\"".$movieTitle[$i]."\" />
+                    <input type=\"hidden\" class=\"searchthumbButton\" name=\"dDate\" value=\"".$releaseDate[$i]."\" />
+                    <input type=\"hidden\" class=\"searchthumbButton\" name=\"dLang\" value=\"".$movieLanguage[$i]."\" />
+                    <input type=\"hidden\" class=\"searchthumbButton\" name=\"dBio\" value=\"".$overviews[$i]."\" />
+                    <input type=\"submit\" class=\"searchthumbButton\" name=\"movieID\" value=\"".$movieIDS[$i]."\" />
+                </form>
+            </div>";
+        }        
+    echo "</div>";
+
+}
+
+include_once 'inc/footer.php';
+?>
